@@ -4,6 +4,7 @@
 --     LIBRARIES     --
 --===================--
 require("libs.ScriptConfig")
+require("libs.Utils")
 
 --===================--
 --      CONFIG       --
