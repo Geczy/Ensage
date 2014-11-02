@@ -23,11 +23,9 @@ local useStickAt       = 0.2 -- 20% HP
 --===================--
 --       CODE        --
 --===================--
-local target    = nil
-local sleepTick = nil
 
 function Tick( tick )
-	if not client.connected or client.loading or client.console or (sleepTick and sleepTick > tick) then
+	if not client.connected or client.loading or client.console or not SleepCheck("AutoItems") then
 		return
 	end
 
@@ -56,10 +54,7 @@ function Tick( tick )
 
 	end
 
-	-- Get visible allies
-	-- local allies = entityList:GetEntities({type=LuaEntity.TYPE_HERO, visible = true, alive = true, team = me:GetEnemyTeam(), illusion=false})
-
-	sleepTick = tick + 300
+	Sleep(250 + client.latency, "AutoItems")
 end
 
 script:RegisterEvent(EVENT_TICK,Tick)
