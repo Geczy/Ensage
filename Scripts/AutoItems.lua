@@ -19,6 +19,7 @@ local enableBottle     = config.Bottle
 local enablePhaseBoots = config.PhaseBoots
 local enableMagicStick = config.MagicStick
 local useStickAt       = 0.2 -- 20% HP
+local range            = 1000
 
 --===================--
 --       CODE        --
