@@ -410,30 +410,29 @@ class 'JukeSpot'
 -- Functions --
 
 function hasTreeConsumableItem(hero)
-	if hero:FindItem("item_quelling_blade") or hero:FindItem("item_tango") then
-		return true
-	end
-	return false
+	return hero:FindItem("item_quelling_blade") or hero:FindItem("item_tango")
 end
 
 -- Events --
 
 function OnLoadTick()
-	if PlayingGame() then
-		local me = entityList:GetMyHero()
-		if not me then
-			return
-		else
-			if #jukeSpotClasses == 0 then
-				for i = 1, #jukeSpotTables do
-					jukeSpotClasses[#jukeSpotClasses+1] = JukeSpot(jukeSpotTables[i])
-				end
-			end
-			reg = true
-			script:RegisterEvent(EVENT_TICK, MainTick)
-			script:UnregisterEvent(OnLoadTick)
+	if not PlayingGame() then
+		return
+	end
+
+	local me = entityList:GetMyHero()
+	if not me then
+		return
+	end
+
+	if #jukeSpotClasses == 0 then
+		for i = 1, #jukeSpotTables do
+			jukeSpotClasses[#jukeSpotClasses+1] = JukeSpot(jukeSpotTables[i])
 		end
 	end
+	reg = true
+	script:RegisterEvent(EVENT_TICK, MainTick)
+	script:UnregisterEvent(OnLoadTick)
 end
 
 function Close()
@@ -451,20 +450,23 @@ function Close()
 end
 
 function MainTick(tick)
-	if PlayingGame() then
-		local me = entityList:GetMyHero()
-		if not me then
-			script:Disable()
-		else
-			local hasTreeConsumableItem = hasTreeConsumableItem(me)
+	if not PlayingGame() then
+		return
+	end
 
-			for i = 1, #jukeSpotClasses do
-				if #jukeSpotClasses[i].treeCutSpots == 0 or hasTreeConsumableItem then
-					jukeSpotClasses[i]:Update()
-				elseif jukeSpotClasses[i].hasParticles then
-					jukeSpotClasses[i]:RemoveEffects()
-				end
-			end
+	local me = entityList:GetMyHero()
+	if not me then
+		script:Disable()
+		return
+	end
+
+	local hasTreeConsumableItem = hasTreeConsumableItem(me)
+
+	for i = 1, #jukeSpotClasses do
+		if #jukeSpotClasses[i].treeCutSpots == 0 or hasTreeConsumableItem then
+			jukeSpotClasses[i]:Update()
+		elseif jukeSpotClasses[i].hasParticles then
+			jukeSpotClasses[i]:RemoveEffects()
 		end
 	end
 end
